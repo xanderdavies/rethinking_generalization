@@ -41,18 +41,18 @@ elif args.model_name == 'mlp-1x512':
     model = nn.Sequential(
         nn.Flatten(),
         nn.Linear(28*28*3, 512),
-        CustomReLU(id=0),
+        CustomReLU(id=0, no_logging=args.no_logging),
         nn.Linear(512, 10)
     ).to(DEVICE)
 elif args.model_name == 'mlp-3x512': # 3 hidden layers
     model = nn.Sequential(
         nn.Flatten(),
         nn.Linear(28*28*3, 512),
-        CustomReLU(id=0),
+        CustomReLU(id=0, no_logging=args.no_logging),
         nn.Linear(512, 512),
-        CustomReLU(id=1),
+        CustomReLU(id=1, no_logging=args.no_logging),
         nn.Linear(512, 512),
-        CustomReLU(id=2),
+        CustomReLU(id=2, no_logging=args.no_logging),
         nn.Linear(512, 10)
     ).to(DEVICE)
 if args.load_state is not None:
