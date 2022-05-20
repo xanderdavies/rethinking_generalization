@@ -23,6 +23,7 @@ parser.add_argument('--load-state', type=str, default=None, help='load state dic
 parser.add_argument('--wandb-project', type=str, default='rethinking-generalization', help='wandb project name')
 parser.add_argument('--no-logging', action='store_true', help='disable logging')
 parser.add_argument('--random-labels', action='store_true', help='corrupt all labels')
+parser.add_argument('--use-adam', action='store_true', help='use adam instead of SGD-M')
 args = parser.parse_args()
 
 BATCH_SIZE = args.batch_size
@@ -61,7 +62,7 @@ if args.load_state is not None:
 train_loader, test_loader = get_dataloaders(BATCH_SIZE, random_labels=args.random_labels)
 
 # opt + loss
-optimizer = SGD(model.parameters(), lr=LR, momentum=MOMENTUM)
+optimizer = SGD(model.parameters(), lr=LR, momentum=MOMENTUM) if not args.use_adam else torch.optim.Adam(model.parameters(), lr=LR)
 scheduler = ExponentialLR(optimizer, LR_DECAY)
 criterion = nn.CrossEntropyLoss()
 
@@ -72,6 +73,8 @@ if not args.no_logging:
     tags = [args.model_name]
     if args.random_labels:
         tags.append('random_labels')
+    if args.use_adam:
+        tags.append('adam')
     run = wandb.init(
         project=args.wandb_project, 
         config=args, 
@@ -82,7 +85,7 @@ if not args.no_logging:
 
 best_test_err = 1
 for ep in range(EPOCHS):
-    train_err, train_loss = epoch(train_loader, model, criterion, epoch_num=ep, total_epochs=100, opt=optimizer, sched=scheduler)
+    train_err, train_loss = epoch(train_loader, model, criterion, epoch_num=ep, total_epochs=EPOCHS, opt=optimizer, sched=scheduler)
     test_err, test_loss = epoch(test_loader, model, criterion)
 
     if test_err < best_test_err:
