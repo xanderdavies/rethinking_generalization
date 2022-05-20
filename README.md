@@ -1,6 +1,6 @@
 # Rethinking Generalization
 
-This repo replicates experiments performed in Zhang et al.'s ["Understanding Deep Learning Requires Rethinking Generalization"](https://arxiv.org/pdf/1611.03530.pdf) (2017). I only replicate experiments conducted on CIFAR10; some extensions are played with in `extensions.py`.
+This repo replicates a subset of experiments performed in Zhang et al.'s ["Understanding Deep Learning Requires Rethinking Generalization"](https://arxiv.org/pdf/1611.03530.pdf) (2017). I only replicate experiments conducted on CIFAR10, and use AlexNet and two MLP variants (1x512, and 3x512). This is mostly an exercise in writing quick and clean PyTorch for me!
 
 ## Usage
 

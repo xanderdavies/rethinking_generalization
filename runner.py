@@ -21,6 +21,7 @@ parser.add_argument('--model-name', type=str, default='resnet18', help='model na
 parser.add_argument('--load-state', type=str, default=None, help='load state dict from file')
 parser.add_argument('--wandb-project', type=str, default='rethinking-generalization', help='wandb project name')
 parser.add_argument('--no-logging', action='store_true', help='disable logging')
+parser.add_argument('--random-labels', action='store_true', help='corrupt all labels')
 args = parser.parse_args()
 
 BATCH_SIZE = args.batch_size
@@ -56,7 +57,7 @@ if args.load_state is not None:
     model.load_state_dict(torch.load(args.load_state))
 
 # get data
-train_loader, test_loader = get_dataloaders(BATCH_SIZE)
+train_loader, test_loader = get_dataloaders(BATCH_SIZE, random_labels=args.random_labels)
 
 # opt + loss
 optimizer = SGD(model.parameters(), lr=LR, momentum=MOMENTUM)
@@ -68,6 +69,8 @@ torch.manual_seed(0)
 run = None
 if not args.no_logging:
     tags = [args.model_name]
+    if args.random_labels:
+        tags.append('random_labels')
     run = wandb.init(
         project=args.wandb_project, 
         config=args, 
