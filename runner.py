@@ -9,6 +9,7 @@ from torch.optim.lr_scheduler import ExponentialLR
 import wandb
 from cifar10 import get_dataloaders
 from utils import epoch, log_data, write_state_dict
+from custom_relu import CustomReLU
 
 # argparse
 parser = argparse.ArgumentParser(description="""Reproducing Zhang et al.'s 'Understanding Deep Neural Networks Requires Rethinking Generalization'.""")
@@ -39,18 +40,18 @@ elif args.model_name == 'mlp-1x512':
     model = nn.Sequential(
         nn.Flatten(),
         nn.Linear(28*28*3, 512),
-        nn.ReLU(),
+        CustomReLU(id=0),
         nn.Linear(512, 10)
     ).to(DEVICE)
 elif args.model_name == 'mlp-3x512': # 3 hidden layers
     model = nn.Sequential(
         nn.Flatten(),
         nn.Linear(28*28*3, 512),
-        nn.ReLU(),
+        CustomReLU(id=0),
         nn.Linear(512, 512),
-        nn.ReLU(),
+        CustomReLU(id=1),
         nn.Linear(512, 512),
-        nn.ReLU(),
+        CustomReLU(id=2),
         nn.Linear(512, 10)
     ).to(DEVICE)
 if args.load_state is not None:
