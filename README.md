@@ -12,3 +12,6 @@ To get setup using the [HMS O2 Cluster](https://harvardmed.atlassian.net/wiki/sp
 * run experiments via `python runner.py`. See `python runner.py -h` for params.
 
 ## Results
+Train Accuracy             |  Test Accuracy
+:-------------------------:|:-------------------------:
+![Train Accuracy](https://user-images.githubusercontent.com/55059966/169595546-c22dbc0a-3297-4dc5-a1c9-70163d72f6f4.png) | ![Test Accuracy](https://user-images.githubusercontent.com/55059966/169595583-5fba6027-8bd9-48e3-a143-79ec98828812.png)
