@@ -3,12 +3,15 @@ import os
 import torch
 import wandb
 
-def log_data(ep, train_err, train_loss, test_err, test_loss):
-    wandb.log({"Loss/train": train_loss,
-                "Acc/train": 1 - train_err,
-                "Loss/test": test_loss,
-                "Acc/test": 1 - test_err,
-                "epoch": ep})
+def log_data(ep, train_err, train_loss, test_err, test_loss, no_logging=False):
+    if not no_logging:
+        wandb.log({
+            "Loss/train": train_loss,
+            "Acc/train": 1 - train_err,
+            "Loss/test": test_loss,
+            "Acc/test": 1 - test_err,
+            "epoch": ep
+        })
 
     print("Train Loss", train_loss)
     print("Train Accuracy", 1 - train_err)
