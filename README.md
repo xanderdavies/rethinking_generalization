@@ -9,4 +9,6 @@ To get setup using the [HMS O2 Cluster](https://harvardmed.atlassian.net/wiki/sp
 * request a compute node (e.g., `srun -n 6 --mem 40G --pty -t 10:00:00 -p gpu --gres=gpu:teslaV100:1 bash`)
 * *Optional: Launch [tmux](https://github.com/tmux/tmux/wiki)*
 * activate relevant conda env (e.g., `source activate sdm_env`)
-* run experiments via `runner.py`. See `runner.py -h` for params.
+* run experiments via `python runner.py`. See `python runner.py -h` for params.
+
+## Results
