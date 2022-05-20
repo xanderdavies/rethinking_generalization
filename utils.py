@@ -43,7 +43,7 @@ def epoch(loader, model, criterion, device='cuda', epoch_num=0, total_epochs=100
     return total_err / len(loader.dataset), total_loss / len(loader.dataset)
 
 def write_state_dict(path, model):
-    if not os.path.isdir(path):
+    if not os.path.isdir(os.path.dirname(path)):
         print("making dir...")
         for i in range(len(path.split("/"))-1):
             p = ('/').join(path.split("/")[:i+1])
