@@ -20,6 +20,7 @@ parser.add_argument('--lr-decay', type=float, default=0.95, help='learning rate 
 parser.add_argument('--model-name', type=str, default='resnet18', help='model name (resnet18, mlp-1x512, mlp-3x512)')
 parser.add_argument('--load-state', type=str, default=None, help='load state dict from file')
 parser.add_argument('--wandb-project', type=str, default='rethinking-generalization', help='wandb project name')
+parser.add_argument('--no-logging', action='store_true', help='disable logging')
 args = parser.parse_args()
 
 BATCH_SIZE = args.batch_size
@@ -35,12 +36,14 @@ if args.model_name == 'resnet18':
     model.fc = nn.Linear(512, 10).to(DEVICE)
 elif args.model_name == 'mlp-1x512':
     model = nn.Sequential(
+        nn.Flatten(),
         nn.Linear(28*28*3, 512),
         nn.ReLU(),
         nn.Linear(512, 10)
     ).to(DEVICE)
 elif args.model_name == 'mlp-3x512': # 3 hidden layers
     model = nn.Sequential(
+        nn.Flatten(),
         nn.Linear(28*28*3, 512),
         nn.ReLU(),
         nn.Linear(512, 512),
@@ -62,12 +65,16 @@ criterion = nn.CrossEntropyLoss()
 
 # initialize and train
 torch.manual_seed(0)
-run = wandb.init(
-    project=args.wandb_project, 
-    config=args, 
-    tags=[args.model_name], 
-    settings=wandb.Settings(start_method="thread")
-)
+run = None
+if not args.no_logging:
+    tags = [args.model_name]
+    run = wandb.init(
+        project=args.wandb_project, 
+        config=args, 
+        tags=tags, 
+        settings=wandb.Settings(start_method="thread"),
+        name=('-').join(tags) + datetime.now().strftime("-%Y%m%d-%H%M%S")
+    )
 
 best_test_err = 1
 for ep in range(EPOCHS):
@@ -75,7 +82,8 @@ for ep in range(EPOCHS):
     test_err, test_loss = epoch(test_loader, model, criterion)
 
     if test_err < best_test_err:
-        write_state_dict(f'./best_weights/{run.name}/best_weights.ckpt')
-        wandb.save(f'./best_weights/{run.name}/best_weights.ckpt')
+        write_state_dict(f'./best_weights/{run.name if run is not None else "scratch"}/best_weights.ckpt', model)
+        if not args.no_logging:
+            wandb.save(f'./best_weights/{run.name if run is not None else "scratch"}/best_weights.ckpt')
     
-    log_data(ep, train_err, train_loss, test_err, test_loss)
+    log_data(ep, train_err, train_loss, test_err, test_loss, no_logging=args.no_logging)
