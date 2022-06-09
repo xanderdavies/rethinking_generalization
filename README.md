@@ -6,3 +6,14 @@ This repo replicates a subset of experiments performed in Zhang et al.'s ["Under
 Train Accuracy             |  Test Accuracy
 :-------------------------:|:-------------------------:
 ![Train Accuracy](https://user-images.githubusercontent.com/55059966/169595546-c22dbc0a-3297-4dc5-a1c9-70163d72f6f4.png) | ![Test Accuracy](https://user-images.githubusercontent.com/55059966/169595583-5fba6027-8bd9-48e3-a143-79ec98828812.png)
+
+## Citation
+```BibTex
+@article{Zhang2017UnderstandingDL,
+  title={Understanding deep learning requires rethinking generalization},
+  author={Chiyuan Zhang and Samy Bengio and Moritz Hardt and Benjamin Recht and Oriol Vinyals},
+  journal={ArXiv},
+  year={2017},
+  volume={abs/1611.03530}
+}
+```
